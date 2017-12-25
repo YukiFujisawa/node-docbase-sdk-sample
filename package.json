@@ -1,0 +1,30 @@
+{
+  "name": "node-docbase-sdk-sample",
+  "version": "1.0.0",
+  "description": "Sample code for node-docbase-sdk",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "tslint 'src/**/*.ts'",
+    "compile": "del-cli lib/* && tsc -p . && npm run lint",
+    "start": "del-cli lib/* && tsc -p . && DOC_BASE_API_TOKEN=*** node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YukiFujisawa/node-docbase-sdk-sample.git"
+  },
+  "author": "Yuki Fujisawa <g031y148yuki@gmail.com> (https://github.com/YukiFujisawa)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YukiFujisawa/node-docbase-sdk-sample/issues"
+  },
+  "homepage": "https://github.com/YukiFujisawa",
+  "dependencies": {
+    "del-cli": "^1.1.0",
+    "node-docbase-sdk": "^0.0.6",
+    "typescript": "^2.6.2"
+  },
+  "devDependencies": {
+    "tslint": "^5.8.0",
+    "tslint-config-airbnb": "^5.3.0"
+  }
+}
