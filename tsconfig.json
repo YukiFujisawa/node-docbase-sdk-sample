@@ -6,7 +6,6 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "outDir": "./lib",
-    "declaration": true,
     "sourceMap": true,
     "rootDirs": [
       "./src"
