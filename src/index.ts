@@ -1,36 +1,31 @@
 import { DocBase } from 'node-docbase-sdk/lib/DocBase';
-import { DocBaseReqCreatePost } from 'node-docbase-sdk/lib/DocBaseReqCreatePost';
+import { Memo } from 'node-docbase-sdk/lib/entities/Memo';
+import { DisclosureScopes } from 'node-docbase-sdk/lib/enums/DisclosureScopes';
 import { DocBaseResponse } from 'node-docbase-sdk/lib/DocBaseResponse';
 import { HttpStatus } from 'node-docbase-sdk/lib/enums/HttpStatus';
-import { DocBaseReqUpdatePost } from 'node-docbase-sdk/lib/DocBaseReqUpdatePost';
-import { DocBaseReqReadPost } from 'node-docbase-sdk/lib/DocBaseReqReadPost';
-import { DocBaseReqReadPosts } from 'node-docbase-sdk/lib/DocBaseReqReadPosts';
-import { DocBaseReqDeletePost } from 'node-docbase-sdk/lib/DocBaseReqDeletePost';
+import { MemoCondition } from 'node-docbase-sdk/lib/conditions/MemoCondition';
+import { DocBaseEntity } from 'node-docbase-sdk/lib/entities/DocBaseEntity';
 
 // Get DocBaseAPI Token from cli.
 // ex.
 //   $ DOC_BASE_API_TOKEN=<DOC_BASE_API_TOKEN> node .
-
-
 const DOC_BASE_API_TOKEN = process.env.DOC_BASE_API_TOKEN;
 const TEAM_NAME = 'TEAM_NAME';
 const KEYWORD = 'DOCBASE_API_TEST';
 
-const docBase: DocBase = new DocBase(DOC_BASE_API_TOKEN);
+const docBase: DocBase = new DocBase(DOC_BASE_API_TOKEN, TEAM_NAME);
 
 // メモ投稿API
 // @see https://help.docbase.io/posts/92980
 async function createPost() {
   console.log('== START createPost ==');
-  const request: DocBaseReqCreatePost = <DocBaseReqCreatePost>{};
-  request.team = TEAM_NAME;
-  request.title = KEYWORD;
-  request.body = KEYWORD;
-  request.draft = false;
-  request.notice = false;
-  request.scope = 'private';
-
-  const reponse: DocBaseResponse = await docBase.createPost(request);
+  const memo: Memo = <Memo>{};
+  memo.title = KEYWORD;
+  memo.body = KEYWORD;
+  memo.draft = false;
+  memo.notice = false;
+  memo.scope = DisclosureScopes.PRIVATE;
+  const reponse: DocBaseResponse = await docBase.memos.create(memo);
   console.log(`=== Reponse: createPost===`);
   console.log(reponse);
   console.log(`======`);
@@ -44,15 +39,14 @@ async function createPost() {
 // @see https://help.docbase.io/posts/92981
 async function updatePosts(postId: number) {
   console.log('== START updatePosts ==');
-  const request: DocBaseReqUpdatePost = <DocBaseReqUpdatePost>{};
-  request.id = postId;
-  request.team = TEAM_NAME;
-  request.title = KEYWORD + '_updated';
-  request.body = KEYWORD + '_updated';
-  request.draft = false;
-  request.notice = false;
-  request.scope = 'private';
-  const reponse: DocBaseResponse = await docBase.updatePost(request);
+  const memo: Memo = <Memo>{};
+  memo.id = postId;
+  memo.title = KEYWORD + '_updated';
+  memo.body = KEYWORD + '_updated';
+  memo.draft = false;
+  memo.notice = false;
+  memo.scope = DisclosureScopes.PRIVATE;
+  const reponse: DocBaseResponse = await docBase.memos.update(memo);
   console.log(`=== Reponse: updatePosts===`);
   console.log(reponse);
   console.log(`======`);
@@ -66,10 +60,7 @@ async function updatePosts(postId: number) {
 // @see https://help.docbase.io/posts/97204
 async function readPost(postId: number) {
   console.log('== START readPost ==');
-  const request: DocBaseReqReadPost = <DocBaseReqReadPost>{};
-  request.team = TEAM_NAME;
-  request.id = postId;
-  const reponse: DocBaseResponse = await docBase.readPost(request);
+  const reponse: DocBaseResponse = await docBase.memos.find(postId);
   console.log(`=== Reponse: readPost ===`);
   console.log(reponse);
   console.log('======');
@@ -83,12 +74,11 @@ async function readPost(postId: number) {
 // @see https://help.docbase.io/posts/92984
 async function readPosts(keyword: string) {
   console.log('== START readPosts ==');
-  const request: DocBaseReqReadPosts = <DocBaseReqReadPosts>{};
-  request.team = TEAM_NAME;
-  request.q = keyword;
-  request.page = 1;
-  request.perPage = 20;
-  const reponse: DocBaseResponse = await docBase.readPosts(request);
+  const condition: MemoCondition = <MemoCondition>{};
+  condition.q = keyword;
+  condition.page = 1;
+  condition.perPage = 20;
+  const reponse: DocBaseResponse = await docBase.memos.where(condition);
   console.log(`=== Reponse: readPosts===`);
   console.log(reponse);
   console.log(`======`);
@@ -102,10 +92,9 @@ async function readPosts(keyword: string) {
 // @see https://help.docbase.io/posts/92982
 async function deletePost(postId: number) {
   console.log('== START deletePost ==');
-  const request: DocBaseReqDeletePost = <DocBaseReqDeletePost>{};
-  request.team = TEAM_NAME;
-  request.id = postId;
-  const reponse: DocBaseResponse = await docBase.deletePost(request);
+  const entity: DocBaseEntity = <DocBaseEntity>{};
+  entity.id = postId;
+  const reponse: DocBaseResponse = await docBase.deletePost(entity);
   console.log(`=== Reponse: deletePost===`);
   console.log(reponse);
   console.log(`======`);
@@ -122,11 +111,10 @@ async function main() {
   resBody = await readPosts(String(resBody.title));
   for (const post of resBody.posts) {
     console.log(JSON.stringify(post));
-    await deletePost(post.id);
+    // await deletePost(post.id);
   }
 }
 
 // == Main ==
 main();
 // ====
-
