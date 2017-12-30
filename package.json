@@ -20,7 +20,7 @@
   "homepage": "https://github.com/YukiFujisawa",
   "dependencies": {
     "del-cli": "^1.1.0",
-    "node-docbase-sdk": "^0.1.4",
+    "node-docbase-sdk": "^0.1.6",
     "typescript": "^2.6.2"
   },
   "devDependencies": {
