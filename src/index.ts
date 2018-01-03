@@ -7,6 +7,8 @@ import { DisclosureScopes } from 'node-docbase-sdk/lib/enums/DisclosureScopes';
 import { Comment } from 'node-docbase-sdk/lib/entities/Comment';
 import { Team } from 'node-docbase-sdk/lib/entities/Team';
 import { Group } from 'node-docbase-sdk/lib/entities/Group';
+import { File } from 'node-docbase-sdk/lib/entities/File';
+import { Tag } from 'node-docbase-sdk/lib/entities/Tag';
 
 // Get DocBaseAPI Token from cli.
 // ex.
@@ -56,6 +58,40 @@ async function getGroups() {
   const response: DocBaseResponse = await docBase.groups.list();
   console.log(`=== response: getGroups===`);
   console.log(response);
+  console.log(`======`);
+  if (response.status === HttpStatus.OK) {
+    return response.body;
+  }
+  throw new Error(response.body);
+}
+
+// タグの取得API
+// @see https://help.docbase.io/posts/92979
+async function getTags() {
+  console.log('== START getTags ==');
+  const response: DocBaseResponse = await docBase.tags.list();
+  console.log(`=== response: getTags===`);
+  console.log(response);
+  console.log(`======`);
+  if (response.status === HttpStatus.OK) {
+    return response.body;
+  }
+  throw new Error(response.body);
+}
+
+// ファイルアップロードAPI
+// @see https://help.docbase.io/posts/225804
+async function uploadFile(filePath: string) {
+  console.log('== START uploadFile ==');
+  const file: File = <File>{};
+  file.file_path = filePath;
+  const splitPath: string[] = filePath.split('/');
+  const fileName = splitPath[splitPath.length - 1];
+  console.log('fileName::' + fileName);
+  file.name = fileName;
+  const response: DocBaseResponse = await docBase.files.create(file);
+  console.log(`=== response: uploadFile===`);
+  console.log(response.body);
   console.log(`======`);
   if (response.status === HttpStatus.OK) {
     return response.body;
@@ -139,7 +175,7 @@ async function searchMemos(keyword: string): Promise<Memo[]> {
   const condition: MemoCondition = <MemoCondition>{};
   condition.q = keyword;
   condition.page = 1;
-  condition.perPage = 20;
+  condition.per_page = 20;
   const response: DocBaseResponse = await docBase.memos.list(condition);
   console.log(`=== response: searchMemos===`);
   console.log(response);
@@ -168,6 +204,7 @@ async function main() {
   try {
     const teams: Team[] = await getMyTeams();
     const groups: Group[] = await getGroups();
+    const tags: Tag[] = await getTags();
     const createdMemo: Memo = await createMemo();
     const updatedMemo: Memo = await updateMemo(createdMemo.id);
     const memoDetail: Memo = await findMemo(updatedMemo.id);
