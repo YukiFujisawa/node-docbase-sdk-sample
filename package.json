@@ -20,11 +20,11 @@
   "homepage": "https://github.com/YukiFujisawa",
   "dependencies": {
     "del-cli": "^1.1.0",
-    "node-docbase-sdk": "^0.4.0",
-    "typescript": "^2.6.2"
+    "node-docbase-sdk": "^0.4.2",
+    "typescript": "^2.9.2"
   },
   "devDependencies": {
-    "tslint": "^5.8.0",
-    "tslint-config-airbnb": "^5.3.0"
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.9.2"
   }
 }
