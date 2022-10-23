@@ -4,8 +4,7 @@
   "description": "Sample code for node-docbase-sdk",
   "main": "lib/index.js",
   "scripts": {
-    "lint": "tslint 'src/**/*.ts'",
-    "compile": "del-cli lib/* && tsc -p . && npm run lint",
+    "compile": "del-cli lib/* && tsc -p .",
     "start": "del-cli lib/* && tsc -p . && DOC_BASE_API_TOKEN=*** node ."
   },
   "repository": {
@@ -20,11 +19,6 @@
   "homepage": "https://github.com/YukiFujisawa",
   "dependencies": {
     "del-cli": "^1.1.0",
-    "node-docbase-sdk": "^0.6.2",
-    "typescript": "^2.9.2"
-  },
-  "devDependencies": {
-    "tslint": "^5.11.0",
-    "tslint-config-airbnb": "^5.9.2"
+    "node-docbase-sdk": "^0.6.2"
   }
 }

@@ -202,7 +202,6 @@ async function deleteMemo(memoId: number): Promise<boolean> {
 
 async function main() {
   try {
-    const teams: Team[] = await getMyTeams();
     const groups: Group[] = await getGroups();
     const tags: Tag[] = await getTags();
     const createdMemo: Memo = await createMemo();
